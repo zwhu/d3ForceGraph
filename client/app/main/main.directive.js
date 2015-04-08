@@ -21,6 +21,10 @@ angular.module('d3ForceTestApp').directive('ghVisualization', function () {
 
       $scope.$watch('val', function (graph) {
 
+        if(graph === 'error') {
+          element[0].innerHTML = '数据出现问题，重新刷新页面试试!';
+        }
+
         // if 'graph' is undefined, exit
         if (!graph || !graph.nodes) {
           return;

@@ -7,5 +7,7 @@ angular.module('d3ForceTestApp')
 
     $http.get('/api/things').success(function(relationships) {
       $scope.relationships = relationships;
+    }).error(function() {
+      $scope.relationships = 'error';
     });
   });
