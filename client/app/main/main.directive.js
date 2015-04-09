@@ -61,9 +61,8 @@ angular.module('d3ForceTestApp').directive('ghVisualization', function () {
         });
 
         function clickNode(d) {
-          return $scope.$parent.$apply(function(){
-            $scope.$parent.data = d;
-          });
+          $scope.$emit('getNodeInfo', d);
+          return $scope.$apply();
         }
 
       });
