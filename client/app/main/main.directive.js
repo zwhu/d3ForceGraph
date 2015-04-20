@@ -12,18 +12,21 @@ angular.module('d3ForceTestApp').directive('ghVisualization', function () {
     scope: {
       val: '='
     },
-    link: function (scope, element, attrs) {
-
+    link: function ($scope, element, attrs) {
       // set up initial svg object
       var svg = d3.select(element[0])
         .append("svg")
         .attr("width", width)
         .attr("height", height);
 
-      scope.$watch('val', function (graph) {
+      $scope.$watch('val', function (graph) {
+
+        if(graph === 'error') {
+          element[0].innerHTML = '数据出现问题，重新刷新页面试试!';
+        }
 
         // if 'graph' is undefined, exit
-        if (!graph || !graph.nodes.length) {
+        if (!graph || !graph.nodes) {
           return;
         }
 
@@ -38,6 +41,7 @@ angular.module('d3ForceTestApp').directive('ghVisualization', function () {
         var node = svg.selectAll(".node")
           .data(graph.nodes)
           .enter().append("circle")
+          .on("click", clickNode)
           .attr("class", "node")
           .attr("r", 5)
           .style("fill", function(d) { return color(d.group); })
@@ -55,6 +59,12 @@ angular.module('d3ForceTestApp').directive('ghVisualization', function () {
           node.attr("cx", function(d) { return d.x; })
             .attr("cy", function(d) { return d.y; });
         });
+
+        function clickNode(d) {
+          $scope.$emit('getNodeInfo', d);
+          return $scope.$apply();
+        }
+
       });
     }
   }
