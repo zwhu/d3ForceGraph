@@ -47,3 +47,27 @@
   stroke: #999;
   stroke-opacity: .6;
 }
+
+/**
+ * select Styles
+ */
+select {
+  margin: 20px 20px 0 0;
+}
+
+input[type='submit'] {
+  line-height: 14px;
+  font-size: 12px;
+}
+
+
+/**
+ * .footer
+ */
+
+footer.footer {
+  border-top: none;
+}
+.footer p {
+  border-top: 1px solid #E5E5E5;
+}

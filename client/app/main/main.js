@@ -6,5 +6,9 @@ angular.module('d3ForceTestApp')
       .when('/', {
         templateUrl: 'app/main/main.html',
         controller: 'MainCtrl'
+      })
+      .when('/:tabs', {
+        templateUrl: 'app/main/main.html',
+        controller: 'MainCtrl'
       });
   });

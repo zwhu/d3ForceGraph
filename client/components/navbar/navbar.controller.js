@@ -3,13 +3,17 @@
 angular.module('d3ForceTestApp')
   .controller('NavbarCtrl', function ($scope, $location) {
     $scope.menu = [{
-      'title': 'Home',
+      'title': '第一级分类',
       'link': '/'
+    }, {
+      'title': '第二级分类',
+      'link': '/second'
+    }, {
+      'title': '第三级分类',
+      'link': '/third'
     }];
 
-    $scope.isCollapsed = true;
-
-    $scope.isActive = function(route) {
+    $scope.isActive = function (route) {
       return route === $location.path();
     };
   });
