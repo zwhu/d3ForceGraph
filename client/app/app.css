@@ -60,6 +60,23 @@ input[type='submit'] {
   font-size: 12px;
 }
 
+/**
+*
+*/
+.zd-table {
+  list-style: none;
+  padding-top: 20px;
+  display: table;
+}
+
+.zd-table li {
+  display: table-row;
+}
+
+.zd-table span {
+  display: table-cell;
+}
+
 
 /**
  * .footer

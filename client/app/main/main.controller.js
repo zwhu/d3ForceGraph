@@ -1,7 +1,12 @@
 'use strict';
 
 angular.module('d3ForceTestApp')
-  .controller('MainCtrl', ['$scope','$http','$routeParams', function ($scope, $http, $routeParams) {
+  .controller('MainCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+    var _config = {
+      xhr: 'http://120.27.43.35:8082/guizhou-food/v1/query/'
+    };
+
+
     $scope.relationships = {};
     $scope.data          = {};
     $scope.assort        = '1';
@@ -1230,25 +1235,45 @@ angular.module('d3ForceTestApp')
       }
     };
 
-    $scope.isSecondAssort = function() {
+    $scope.isSecondAssort = function () {
       return $routeParams.tabs !== "second" && $routeParams.tabs !== "third";
     };
-    $scope.isThirdAssort = function() {
+    $scope.isThirdAssort  = function () {
       return $routeParams.tabs !== "third";
     };
 
 
     $scope.getData = function () {
-      var categoryId = ($scope.thirdAssort && $scope.thirdAssort.category_id)
-        || ($scope.secondAssort && $scope.secondAssort.category_id)
-        || ($scope.firstAssort && $scope.firstAssort.category_id);
+      var _code  = ($scope.thirdAssort && $scope.thirdAssort.category_id)
+            || ($scope.secondAssort && $scope.secondAssort.category_id)
+            || ($scope.firstAssort && $scope.firstAssort.category_id),
+          _level = _code ? _code.length / 2 : 0;
+
+      if (!_level)
+        return;
+
+      // TODO： 1. 拼字符串
+      // TODO： 2. 根据不同返回值封装不同的请求，是用 $q
+
+      $scope.display = [];
+
+      $http.get(_config.xhr + 'products/queryByCategory?level=' + _level + '&code=' + _code + '').success(function (data, status) {
+        if(status === 204 || data.count === 0) {
+          //TODO:  confirm
+          console.log('没有查询到对应的结果');
+        } else {
+          $scope.data = data;
+
+          //var _defaultCount = 30;
+          //if (data.product_list) {
+          //  $scope.display = data.product_list.slice(0, _defaultCount);
+          //  console.log($scope.display)
+          //}
 
 
-      // TODO： 拼字符串
-      $http.get('/api/things').success(function (relationships) {
-        $scope.relationships = relationships;
-      }).error(function () {
-        $scope.relationships = 'error';
+        }
+      }).error(function (data, status) {
+          console.log('网络出问题了，请重新刷新试试');
       });
     };
 

@@ -12,17 +12,14 @@ angular.module('d3ForceTestApp').directive('ghVisualization', function () {
     scope: {
       val: '='
     },
-    link: function ($scope, element, attrs) {
-      // set up initial svg object
-      var svg = d3.select(element[0])
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
-
+    link: function ($scope, element, attrs, _) {
       $scope.$watch('val', function (graph) {
+        d3.select(element[0]).html('<svg width="'+ width + '" height="' + height + '"></svg>');
+
+        var svg = d3.select('svg');
 
         if(graph === 'error') {
-          element[0].innerHTML = '数据出现问题，重新刷新页面试试!';
+          d3.select(element[0]).html('数据出现问题，重新刷新页面试试!');
         }
 
         // if 'graph' is undefined, exit
@@ -30,7 +27,7 @@ angular.module('d3ForceTestApp').directive('ghVisualization', function () {
           return;
         }
 
-        force.nodes(graph.nodes).links(graph.links).start();
+        force.nodes(graph.nodes).links(graph.links).linkDistance(100).start();
 
         var link = svg.selectAll(".link")
           .data(graph.links)
@@ -41,14 +38,18 @@ angular.module('d3ForceTestApp').directive('ghVisualization', function () {
         var node = svg.selectAll(".node")
           .data(graph.nodes)
           .enter().append("circle")
-          .on("click", clickNode)
           .attr("class", "node")
-          .attr("r", 5)
+          .attr("r", 10)
           .style("fill", function(d) { return color(d.group); })
           .call(force.drag);
 
-        node.append("title")
-          .text(function(d) { return d.name; });
+        var texts = svg.selectAll("text")
+          .data(graph.nodes)
+          .enter().append("text")
+          .attr("class", "text")
+          .attr("x", 20)
+          .attr("dy", ".35em")
+          .text(function(d) {  return d.name;  });
 
         force.on("tick", function() {
           link.attr("x1", function(d) { return d.source.x; })
@@ -58,6 +59,10 @@ angular.module('d3ForceTestApp').directive('ghVisualization', function () {
 
           node.attr("cx", function(d) { return d.x; })
             .attr("cy", function(d) { return d.y; });
+
+          texts.attr("transform", function(d) {
+            return "translate(" + d.x + "," + d.y + ")";
+          });
         });
 
         function clickNode(d) {

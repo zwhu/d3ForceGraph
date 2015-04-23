@@ -6,8 +6,7 @@ angular.module('d3ForceTestApp', [
   'ngSanitize',
   'ngRoute',
   'ui.bootstrap'
-])
-  .config(function ($routeProvider, $locationProvider) {
+]).config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .otherwise({
         redirectTo: '/'
